@@ -6,13 +6,13 @@
 ```
 
 ### Download rocm_techsupport.sh shell script using:
-***wget -O rocm_techsupport.sh --no-check-certificate https://raw.githubusercontent.com/amddcgpuce/rocminstaller/master/rocm_techsupport.sh*** 
+***wget -O rocm_techsupport.sh --no-check-certificate https://raw.githubusercontent.com/amddcgpuce/rocmtechsupport/master/rocm_techsupport.sh*** 
 
 ### Example Usage:
 ```
 mkdir  downloads
 cd  downloads
-wget -O rocm_techsupport.sh --no-check-certificate https://raw.githubusercontent.com/amddcgpuce/rocminstaller/master/rocm_techsupport.sh
+wget -O rocm_techsupport.sh --no-check-certificate https://raw.githubusercontent.com/amddcgpuce/rocmtechsupport/master/rocm_techsupport.sh
 
 #Redirect output to file with SYSTEM_NAME_or_ISSUEID
 sudo sh ./rocm_techsupport.sh > SYSTEM_NAME_or_ISSUEID.rocm_techsupport.log 2>&1
