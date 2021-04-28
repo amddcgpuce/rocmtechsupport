@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.24
+# Revision: V1.25
+# V1.25: grab amdgpu udev rules, lsinitrd/ramfs
 # V1.24: add dkms status
 # V1.23: add 4.0 check
 # V1.22: workaround ROCm 3.9 rocm-smi bug
@@ -36,7 +37,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.24 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.25 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -141,6 +142,19 @@ echo "===== Section: amdgpu modinfo          ==============="
 # dkms status
 echo "===== Section: dkms status             ==============="
 /usr/sbin/dkms status
+
+# amdgpu udev rules
+echo "===== Section: amdgpu udev rule        ==============="
+cat /etc/udev/rules.d/70-amdgpu.rules
+
+# lsinitrd or lsinitramfs dump
+echo "===== Section: lsinitrd lsinitramfs    ==============="
+if [ "$pkgtype" = "deb" ]
+then
+    /usr/bin/lsinitramfs /boot/initrd.img-$(/bin/uname -r)
+else
+    sudo /usr/bin/lsinitrd
+fi
 
 # Hardware Topology
 echo "===== Section: Hardware Topology       ==============="
