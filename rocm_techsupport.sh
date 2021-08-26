@@ -7,6 +7,7 @@
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
 # Revision: V1.25
+# V1.26: allow to specify ROCM_VERSION in CLI to change from default path (/opt/rocm)
 # V1.25: grab amdgpu udev rules, lsinitrd/ramfs
 # V1.24: add dkms status
 # V1.23: add 4.0 check
@@ -213,12 +214,12 @@ env | /bin/grep -i 'rocm'
 # Select latest ROCM installed version: only supports 3.1 or newer
 echo "===== Section: Available ROCm versions ==============="
 if [ "$ROCM_VERSION"x = "x" ]; then
-/bin/ls -v -d /opt/rocm*
-ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
-if [ "$ROCM_VERSION"x = "x" ]
-then
-    ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
-fi
+    /bin/ls -v -d /opt/rocm*
+    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
+    if [ "$ROCM_VERSION"x = "x" ]
+    then
+        ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
+    fi
 fi 
 echo "==== Using $ROCM_VERSION to collect ROCm information.==== "
 
