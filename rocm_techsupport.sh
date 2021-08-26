@@ -1,12 +1,14 @@
 #!/bin/sh
-# Copyright (c) 2020 Advanced Micro Devices, Inc. All Rights Reserved.
+# Copyright (c) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
 #
 # rocm_techsupport.sh
 # This script collects ROCm and system logs on a Debian OS installation.
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.25
+#
+# Revision: V1.26
+#
 # V1.26: allow to specify ROCM_VERSION in CLI to change from default path (/opt/rocm)
 # V1.25: grab amdgpu udev rules, lsinitrd/ramfs
 # V1.24: add dkms status
