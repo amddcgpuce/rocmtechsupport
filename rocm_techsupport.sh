@@ -1,12 +1,15 @@
 #!/bin/sh
-# Copyright (c) 2020 Advanced Micro Devices, Inc. All Rights Reserved.
+# Copyright (c) 2021 Advanced Micro Devices, Inc. All Rights Reserved.
 #
 # rocm_techsupport.sh
 # This script collects ROCm and system logs on a Debian OS installation.
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.25
+#
+# Revision: V1.26
+#
+# V1.26: allow to specify ROCM_VERSION in CLI to change from default path (/opt/rocm)
 # V1.25: grab amdgpu udev rules, lsinitrd/ramfs
 # V1.24: add dkms status
 # V1.23: add 4.0 check
@@ -37,7 +40,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.25 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.26 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -212,12 +215,14 @@ env | /bin/grep -i 'rocm'
 
 # Select latest ROCM installed version: only supports 3.1 or newer
 echo "===== Section: Available ROCm versions ==============="
-/bin/ls -v -d /opt/rocm*
-ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
-if [ "$ROCM_VERSION"x = "x" ]
-then
-    ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
-fi
+if [ "$ROCM_VERSION"x = "x" ]; then
+    /bin/ls -v -d /opt/rocm*
+    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
+    if [ "$ROCM_VERSION"x = "x" ]
+    then
+        ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
+    fi
+fi 
 echo "==== Using $ROCM_VERSION to collect ROCm information.==== "
 
 # RBT Topology
