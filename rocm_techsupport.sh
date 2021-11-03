@@ -213,12 +213,14 @@ env | /bin/grep -i 'rocm'
 
 # Select latest ROCM installed version: only supports 3.1 or newer
 echo "===== Section: Available ROCm versions ==============="
-/bin/ls -v -d /opt/rocm*
-ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
-if [ "$ROCM_VERSION"x = "x" ]
-then
-    ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
-fi
+if [ "$ROCM_VERSION"x = "x" ]; then
+    /bin/ls -v -d /opt/rocm*
+    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
+    if [ "$ROCM_VERSION"x = "x" ]
+    then
+        ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
+    fi
+fi 
 echo "==== Using $ROCM_VERSION to collect ROCm information.==== "
 
 # RBT Topology
