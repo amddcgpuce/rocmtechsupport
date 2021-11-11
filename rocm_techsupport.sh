@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.26
+# Revision: V1.27
+# V1.27: grab repo setup info
 # V1.26: grep amdgpu-dkms packages (new in 4.5)
 # V1.25: grab amdgpu udev rules, lsinitrd/ramfs
 # V1.24: add dkms status
@@ -38,7 +39,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.26 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.27 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -189,6 +190,10 @@ then
 else
     echo "ROCmTechSupportNotFound: lspci utility not found!"
 fi
+
+# Print ROCm repo setup
+echo "===== Section: ROCm Repo Setup         ==============="
+/bin/grep -i -E 'rocm|amdgpu' /etc/apt/sources.list.d/* /etc/zypp/repos.d/* /etc/yum.repos.d/*
 
 # Print ROCm installed packages
 echo "===== Section: ROCm Packages Installed ==============="
