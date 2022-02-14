@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.28
+# Revision: V1.29
+# V1.29: check 5.0 version
 # V1.28: add timestamp
 # V1.27: grab repo setup info
 # V1.26: grep amdgpu-dkms packages (new in 4.5)
@@ -40,7 +41,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.28 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.29 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -221,7 +222,7 @@ env | /bin/grep -i 'rocm'
 echo "===== Section: Available ROCm versions ==============="
 if [ "$ROCM_VERSION"x = "x" ]; then
     /bin/ls -v -d /opt/rocm*
-    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-4]* | /usr/bin/tail -1`
+    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-5]* | /usr/bin/tail -1`
     if [ "$ROCM_VERSION"x = "x" ]
     then
         ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
