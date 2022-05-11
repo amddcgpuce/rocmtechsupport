@@ -336,69 +336,69 @@ echo "===== Section: NIC and GPU Link Status output    ==============="
 if [ -f /usr/bin/lspci ]
 then
     echo "===== Run GPU PCIe Link Status concise =============== "
-    for i in `sudo /usr/bin/lspci | grep Display | awk '{print$1}'`
+    for i in `sudo /usr/bin/lspci | /bin/grep Display | /usr/bin/awk '{print$1}'`
     do
 	/usr/bin/lspci -s $i
-        for j in `sudo /usr/bin/lspci -s $i -PP| awk '{print$1}'| tr / " "`
+        for j in `sudo /usr/bin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
         do
-	    echo "  $j -" $(sudo /usr/bin/lspci -vvs $j | grep -E "LnkSta:")
+	    echo "  $j -" $(sudo /usr/bin/lspci -vvs $j | /bin/grep -E "LnkSta:")
         done
     done
 
     echo "===== Run Mellanox NIC PCIe Link Status concise =============== "
-    for i in `sudo /usr/bin/lspci | grep Mellanox | awk '{print$1}'`
+    for i in `sudo /usr/bin/lspci | /bin/grep Mellanox | /usr/bin/awk '{print$1}'`
     do
 	/usr/bin/lspci -s $i
-        for j in `sudo /usr/bin/lspci -s $i -PP| awk '{print$1}'| tr / " "`
+        for j in `sudo /usr/bin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
         do
-	    echo "  $j -" $(sudo /usr/bin/lspci -vvs $j | grep -E "LnkSta:")
+	    echo "  $j -" $(sudo /usr/bin/lspci -vvs $j | /bin/grep -E "LnkSta:")
         done
-	sudo /usr/bin/lspci -vv -s $i |grep -A 3 "Part number"
+	sudo /usr/bin/lspci -vv -s $i | /bin/grep -A 3 "Part number"
     done
 elif [ -f /usr/sbin/lspci ]
 then
 
     echo "===== Run GPU PCIe Link Status concise =============== "
-    for i in `sudo /usr/sbin/lspci | grep Display | awk '{print$1}'`
+    for i in `sudo /usr/sbin/lspci | /bin/grep Display | /usr/bin/awk '{print$1}'`
     do
 	/usr/sbin/lspci -s $i
-        for j in `sudo /usr/sbin/lspci -s $i -PP| awk '{print$1}'| tr / " "`
+        for j in `sudo /usr/sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
         do
-	    echo "  $j -" $(sudo /usr/sbin/lspci -vvs $j | grep -E "LnkSta:")
+	    echo "  $j -" $(sudo /usr/sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
         done
     done
 
     echo "===== Run Mellanox NIC PCIe Link Status concise =============== "
-    for i in `sudo /usr/sbin/lspci | grep Mellanox | awk '{print$1}'`
+    for i in `sudo /usr/sbin/lspci | /bin/grep Mellanox | /usr/bin/awk '{print$1}'`
     do
 	/usr/sbin/lspci -s $i
-        for j in `sudo /usr/sbin/lspci -s $i -PP| awk '{print$1}'| tr / " "`
+        for j in `sudo /usr/sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
         do
-	    echo "  $j -" $(sudo /usr/sbin/lspci -vvs $j | grep -E "LnkSta:")
+	    echo "  $j -" $(sudo /usr/sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
         done
-	sudo /usr/sbin/lspci -vv -s $i |grep -A 3 "Part number"
+	sudo /usr/sbin/lspci -vv -s $i | /bin/grep -A 3 "Part number"
     done
 elif [ -f /sbin/lspci ]
 then
     echo "===== Run GPU PCIe Link Status concise =============== "
-    for i in `sudo /sbin/lspci | grep Display | awk '{print$1}'`
+    for i in `sudo /sbin/lspci | /bin/grep Display | /usr/bin/awk '{print$1}'`
     do
 	/sbin/lspci -s $i
-        for j in `sudo /sbin/lspci -s $i -PP| awk '{print$1}'| tr / " "`
+        for j in `sudo /sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
         do
-	    echo "  $j -" $(sudo /sbin/lspci -vvs $j | grep -E "LnkSta:")
+	    echo "  $j -" $(sudo /sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
         done
     done
 
     echo "===== Run Mellanox NIC PCIe Link Status concise =============== "
-    for i in `sudo /sbin/lspci | grep Mellanox | awk '{print$1}'`
+    for i in `sudo /sbin/lspci | /bin/grep Mellanox | /usr/bin/awk '{print$1}'`
     do
 	/usr/sbin/lspci -s $i
-        for j in `sudo /sbin/lspci -s $i -PP| awk '{print$1}'| tr / " "`
+        for j in `sudo /sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
         do
-	    echo "  $j -" $(sudo /sbin/lspci -vvs $j | grep -E "LnkSta:")
+	    echo "  $j -" $(sudo /sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
         done
-	sudo /sbin/lspci -vv -s $i |grep -A 3 "Part number"
+	sudo /sbin/lspci -vv -s $i | /bin/grep -A 3 "Part number"
     done
 else
     echo "ROCmTechSupportNotFound: lspci utility not found!"
@@ -466,11 +466,27 @@ if [ -f /usr/bin/mst ]
 then
     sudo /usr/bin/mst start
     sudo /usr/bin/mst status -v
-    for i in `sudo /usr/bin/mst status |grep pciconf |awk '{print $1}'`
+    for i in `sudo /usr/bin/mst status | /bin/grep pciconf | /usr/bin/awk '{print $1}'`
     do
 	/usr/bin/mlxconfig -d $i q 
     done
 else
     echo "Note: Install Mellanox OFED to get Mellanox Software Tools information"
     echo "ROCmTechSupportNotFound: mst not found!"
+fi
+
+echo "===== Section: Ethernet IP ADDR information    ==============="
+# Ethernet IP Information
+if [ -f /usr/bin/ip ]
+then
+    /usr/bin/ip addr
+
+elif [ -f /usr/sbin/ip ]
+then
+    /usr/sbin/ip addr
+elif [ -f /sbin/ip ]
+then
+    /sbin/ip addr
+else
+    echo "ROCmTechSupportNotFound: ip command not found!"
 fi
