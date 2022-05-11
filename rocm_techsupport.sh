@@ -475,6 +475,7 @@ else
     echo "ROCmTechSupportNotFound: mst not found!"
 fi
 
+echo "===== Section: Ethernet IP ADDR information    ==============="
 # Ethernet IP Information
 if [ -f /usr/bin/ip ]
 then
