@@ -43,7 +43,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.29 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.30 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -466,10 +466,6 @@ if [ -f /usr/bin/mst ]
 then
     sudo /usr/bin/mst start
     sudo /usr/bin/mst status -v
-    for i in `sudo /usr/bin/mst status | /bin/grep pciconf | /usr/bin/awk '{print $1}'`
-    do
-	/usr/bin/mlxconfig -d $i q 
-    done
 else
     echo "Note: Install Mellanox OFED to get Mellanox Software Tools information"
     echo "ROCmTechSupportNotFound: mst not found!"
