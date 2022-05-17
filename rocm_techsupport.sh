@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.30
+# Revision: V1.31
+# V1.31: Removed mlxconfig query commands
 # V1.30: added log capture for Mellanox NIC
 #        updated PCIe link status to include GPU v-bridge 
 # V1.29: check 5.0 version
@@ -43,7 +44,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.29 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.31 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -466,10 +467,6 @@ if [ -f /usr/bin/mst ]
 then
     sudo /usr/bin/mst start
     sudo /usr/bin/mst status -v
-    for i in `sudo /usr/bin/mst status | /bin/grep pciconf | /usr/bin/awk '{print $1}'`
-    do
-	/usr/bin/mlxconfig -d $i q 
-    done
 else
     echo "Note: Install Mellanox OFED to get Mellanox Software Tools information"
     echo "ROCmTechSupportNotFound: mst not found!"
