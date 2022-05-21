@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.31
+# Revision: V1.32
+# V1.32: Revert section broken in SLES15
 # V1.31: Removed mlxconfig query commands
 # V1.30: added log capture for Mellanox NIC
 #        updated PCIe link status to include GPU v-bridge 
@@ -44,7 +45,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.31 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.32 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -331,78 +332,6 @@ else
     echo "Note: Install numactl to get numa hardware listing information"
     echo "    Ex: sudo apt install numactl "
     echo "ROCmTechSupportNotFound: numactl utility not found!"
-fi
-
-echo "===== Section: NIC and GPU Link Status output    ==============="
-if [ -f /usr/bin/lspci ]
-then
-    echo "===== Run GPU PCIe Link Status concise =============== "
-    for i in `sudo /usr/bin/lspci | /bin/grep Display | /usr/bin/awk '{print$1}'`
-    do
-	/usr/bin/lspci -s $i
-        for j in `sudo /usr/bin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
-        do
-	    echo "  $j -" $(sudo /usr/bin/lspci -vvs $j | /bin/grep -E "LnkSta:")
-        done
-    done
-
-    echo "===== Run Mellanox NIC PCIe Link Status concise =============== "
-    for i in `sudo /usr/bin/lspci | /bin/grep Mellanox | /usr/bin/awk '{print$1}'`
-    do
-	/usr/bin/lspci -s $i
-        for j in `sudo /usr/bin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
-        do
-	    echo "  $j -" $(sudo /usr/bin/lspci -vvs $j | /bin/grep -E "LnkSta:")
-        done
-	sudo /usr/bin/lspci -vv -s $i | /bin/grep -A 3 "Part number"
-    done
-elif [ -f /usr/sbin/lspci ]
-then
-
-    echo "===== Run GPU PCIe Link Status concise =============== "
-    for i in `sudo /usr/sbin/lspci | /bin/grep Display | /usr/bin/awk '{print$1}'`
-    do
-	/usr/sbin/lspci -s $i
-        for j in `sudo /usr/sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
-        do
-	    echo "  $j -" $(sudo /usr/sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
-        done
-    done
-
-    echo "===== Run Mellanox NIC PCIe Link Status concise =============== "
-    for i in `sudo /usr/sbin/lspci | /bin/grep Mellanox | /usr/bin/awk '{print$1}'`
-    do
-	/usr/sbin/lspci -s $i
-        for j in `sudo /usr/sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
-        do
-	    echo "  $j -" $(sudo /usr/sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
-        done
-	sudo /usr/sbin/lspci -vv -s $i | /bin/grep -A 3 "Part number"
-    done
-elif [ -f /sbin/lspci ]
-then
-    echo "===== Run GPU PCIe Link Status concise =============== "
-    for i in `sudo /sbin/lspci | /bin/grep Display | /usr/bin/awk '{print$1}'`
-    do
-	/sbin/lspci -s $i
-        for j in `sudo /sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
-        do
-	    echo "  $j -" $(sudo /sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
-        done
-    done
-
-    echo "===== Run Mellanox NIC PCIe Link Status concise =============== "
-    for i in `sudo /sbin/lspci | /bin/grep Mellanox | /usr/bin/awk '{print$1}'`
-    do
-	/usr/sbin/lspci -s $i
-        for j in `sudo /sbin/lspci -s $i -PP| /usr/bin/awk '{print$1}'| tr / " "`
-        do
-	    echo "  $j -" $(sudo /sbin/lspci -vvs $j | /bin/grep -E "LnkSta:")
-        done
-	sudo /sbin/lspci -vv -s $i | /bin/grep -A 3 "Part number"
-    done
-else
-    echo "ROCmTechSupportNotFound: lspci utility not found!"
 fi
 
 echo "===== Section: NVIDIA Mellanox IB output    ==============="
