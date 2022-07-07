@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.32
+# Revision: V1.33
+# V1.33: Remove dockerchk
 # V1.32: Revert section broken in SLES15
 # V1.31: Removed mlxconfig query commands
 # V1.30: added log capture for Mellanox NIC
@@ -45,7 +46,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.32 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.33 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -78,39 +79,33 @@ else
     echo "WARNING: to enable persistent boot logs for collection and analysis."
 fi
 
-dockerchk=`/bin/grep cpuset /proc/1/cgroup | /usr/bin/awk 'BEGIN {FS=":"} {print $3}'`
-if [ "$dockerchk" != "/" ]
-then
-    echo "Section: Current boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
-
-elif [ -f /bin/journalctl ]
+if [ -f /bin/journalctl ]
 then
     echo "Section: dmesg boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Current boot logs"
-    /bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Previous boot logs"
-    /bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Second Previous boot logs"
-    /bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Third Previous boot logs"
-    /bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
 elif [ -f /usr/bin/journalctl ]
 then
     echo "Section: dmesg boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Current boot logs"
-    /usr/bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Previous boot logs"
-    /usr/bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Second Previous boot logs"
-    /usr/bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "Section: Third Previous boot logs"
-    /usr/bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
 else
     echo "Section: dmesg boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
     echo "ROCmTechSupportNotFound: journalctl utility not found!"
 fi
 
