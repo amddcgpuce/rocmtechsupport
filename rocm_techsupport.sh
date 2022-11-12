@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.34
+# Revision: V1.35
+# V1.35: grep amdfwflash
 # V1.34: grep watchdog
 # V1.33: Remove dockerchk
 # V1.32: Revert section broken in SLES15
@@ -47,7 +48,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.34 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.35 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -83,30 +84,30 @@ fi
 if [ -f /bin/journalctl ]
 then
     echo "Section: dmesg boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Current boot logs"
-    /bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Previous boot logs"
-    /bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Second Previous boot logs"
-    /bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Third Previous boot logs"
-    /bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
 elif [ -f /usr/bin/journalctl ]
 then
     echo "Section: dmesg boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Current boot logs"
-    /usr/bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Previous boot logs"
-    /usr/bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Second Previous boot logs"
-    /usr/bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "Section: Third Previous boot logs"
-    /usr/bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /usr/bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
 else
     echo "Section: dmesg boot logs"
-    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER'
+    /bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'
     echo "ROCmTechSupportNotFound: journalctl utility not found!"
 fi
 
@@ -201,22 +202,22 @@ echo "===== Section: ROCm Repo Setup         ==============="
 echo "===== Section: ROCm Packages Installed ==============="
 if [ "$pkgtype" = "deb" ]
 then
-    /usr/bin/dpkg -l | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|^ii  hip|hcc|hsa|rocm|atmi|^ii  comgr|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocbl|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|openmp' | /usr/bin/sort
+    /usr/bin/dpkg -l | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|^ii  hip|hcc|hsa|rocm|atmi|^ii  comgr|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocbl|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|openmp|amdfwflash|ocl|opencl' | /usr/bin/sort
 else
-    /usr/bin/rpm -qa | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|hip|hcc|hsa|rocm|atmi|comgr|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocblas|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|openmp' | /usr/bin/sort
+    /usr/bin/rpm -qa | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|hip|hcc|hsa|rocm|atmi|comgr|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocblas|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|openmp|amdfwflash|ocl|opencl' | /usr/bin/sort
 fi
 
 # Log ROCm related ldconfig entries
 echo "===== Section: ROCm ldconfig entries   ==============="
-/bin/grep -i 'rocm' /etc/ld.so.conf.d/*
+/bin/grep -i -E 'rocm' /etc/ld.so.conf.d/*
 
 # Dump ROCm cached ldconfig entries
 echo "===== Section: ROCm ldcache entries      ============="
-ldconfig -p | grep rocm
+ldconfig -p | /bin/grep -i -E 'rocm'
 
 # Dump ROCm related environmental variables
 echo "===== Section: ROCm environment variables============="
-env | /bin/grep -i 'rocm'
+env | /bin/grep -i -E 'rocm|hsa|hip|mpi|openmp|ucx|miopen'
 
 # Select latest ROCM installed version: only supports 3.1 or newer
 echo "===== Section: Available ROCm versions ==============="
@@ -261,7 +262,7 @@ fi
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
     echo "===== Section: ROCm SMI pcieclk clock  ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -c | /bin/grep "pcie"
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -c | /bin/grep -i -E 'pcie'
 fi
 
     echo "===== Section: GPU PCIe Link Config    ==============="
