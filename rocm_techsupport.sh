@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.35
+# Revision: V1.36
+# V1.36: 16 gpu, showtopo, showserial, showperflevel sections
 # V1.35: grep amdfwflash
 # V1.34: grep watchdog
 # V1.33: Remove dockerchk
@@ -48,7 +49,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.35 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.36 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -266,7 +267,7 @@ then
 fi
 
     echo "===== Section: GPU PCIe Link Config    ==============="
-for i in $(seq 0 8)
+for i in $(seq 0 16)
 do
     echo "GPU $i PCIe Link Width Speed: "
     cat /sys/class/drm/card$i/device/current_link_width
@@ -275,6 +276,32 @@ done
 
     echo "===== Section: KFD PIDs sysfs kfd proc ==============="
 ls /sys/class/kfd/kfd/proc/
+# ROCm SMI - showpids
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showpids
+fi
+
+    echo "===== Section: showtopo toplogy        ==============="
+# ROCm SMI - showtopo
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showtopo
+fi
+
+    echo "===== Section: showserial              ==============="
+# ROCm SMI - showserial
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showserial
+fi
+
+    echo "===== Section: showperflevel           ==============="
+# ROCm SMI - showperflevel
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showperflevel
+fi
 
 # ROCm SMI - RAS info
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
