@@ -1,12 +1,13 @@
 #!/bin/sh
-# Copyright (c) 2022 Advanced Micro Devices, Inc. All Rights Reserved.
+# Copyright (c) 2023 Advanced Micro Devices, Inc. All Rights Reserved.
 #
 # rocm_techsupport.sh
 # This script collects ROCm and system logs on a Debian OS installation.
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.36
+# Revision: V1.37
+# V1.37: ROCm 6, rocm-smi
 # V1.36: 16 gpu, showtopo, showserial, showperflevel sections
 # V1.35: grep amdfwflash
 # V1.34: grep watchdog
@@ -49,7 +50,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.36 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.37 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -203,9 +204,9 @@ echo "===== Section: ROCm Repo Setup         ==============="
 echo "===== Section: ROCm Packages Installed ==============="
 if [ "$pkgtype" = "deb" ]
 then
-    /usr/bin/dpkg -l | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|^ii  hip|hcc|hsa|rocm|atmi|^ii  comgr|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocbl|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|openmp|amdfwflash|ocl|opencl' | /usr/bin/sort
+    /usr/bin/dpkg -l | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|^ii  hip|hcc|hsa|rocm|atmi|^ii  comgr|composa|amd-smi|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocbl|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|rocwmma|rpp|openmp|amdfwflash|ocl|opencl' | /usr/bin/sort
 else
-    /usr/bin/rpm -qa | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|hip|hcc|hsa|rocm|atmi|comgr|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocblas|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|openmp|amdfwflash|ocl|opencl' | /usr/bin/sort
+    /usr/bin/rpm -qa | /bin/grep -i -E 'ocl-icd|kfdtest|llvm-amd|miopen|half|hip|hcc|hsa|rocm|atmi|comgr|composa|amd-smi|aomp|amdgpu|rock|mivision|migraph|rocprofiler|roctracer|rocblas|hipify|rocsol|rocthr|rocff|rocalu|rocprim|rocrand|rccl|rocspar|rdc|rocwmma|rpp|openmp|amdfwflash|ocl|opencl' | /usr/bin/sort
 fi
 
 # Log ROCm related ldconfig entries
@@ -224,7 +225,7 @@ env | /bin/grep -i -E 'rocm|hsa|hip|mpi|openmp|ucx|miopen'
 echo "===== Section: Available ROCm versions ==============="
 if [ "$ROCM_VERSION"x = "x" ]; then
     /bin/ls -v -d /opt/rocm*
-    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-5]* | /usr/bin/tail -1`
+    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-6]* | /usr/bin/tail -1`
     if [ "$ROCM_VERSION"x = "x" ]
     then
         ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
@@ -322,6 +323,34 @@ if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
     echo "===== Section: ROCm SMI clocks         ==============="
     LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi -cga
+fi
+
+# ROCm SMI - shownps
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    echo "===== Section: ROCm Show NPS Mode      ==============="
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --shownpsmode
+fi
+
+# ROCm SMI - showcomputepartition
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    echo "===== Section: ROCm Show Partition     ==============="
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showcomputepartition
+fi
+
+# ROCm SMI - shownodesbw
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    echo "===== Section: ROCm Show Nodebsion     ==============="
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --shownodesbw
+fi
+
+# ROCm SMI - showtopo
+if [ -f $ROCM_VERSION/bin/rocm-smi ]
+then
+    echo "===== Section: ROCm showtopology       ==============="
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showtopo
 fi
 
 # ROCm Agent Information
