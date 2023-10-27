@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.37
+# Revision: V1.38
+# V1.38: fix npsmode
 # V1.37: ROCm 6, rocm-smi
 # V1.36: 16 gpu, showtopo, showserial, showperflevel sections
 # V1.35: grep amdfwflash
@@ -50,7 +51,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.37 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.38 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -328,14 +329,14 @@ fi
 # ROCm SMI - shownps
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
-    echo "===== Section: ROCm Show NPS Mode      ==============="
-    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --shownpsmode
+    echo "===== Section: ROCm Show memorypartition=============="
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showmemorypartition
 fi
 
 # ROCm SMI - showcomputepartition
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
-    echo "===== Section: ROCm Show Partition     ==============="
+    echo "===== Section: ROCm Show computepartition============="
     LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --showcomputepartition
 fi
 
