@@ -6,7 +6,8 @@
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.39
+# Revision: V1.40
+# V1.40: add AMD-SMI support (Shaun.O'Neill@amd.com)
 # V1.39: add mce, edac
 # V1.38: fix npsmode
 # V1.37: ROCm 6, rocm-smi
@@ -244,6 +245,71 @@ else
     echo "$ROCM_VERSION/bin/rocm-bandwidth-test command not found. Skipping topology information."
     echo "Note: Install rocb=m-bandwidth-test ROCm package to get topology information"
     echo "    Ex: sudo apt install rocm-bandwidth-test "
+fi
+
+# AMD SMI 
+echo "===== Section: AMD SMI                ==============="
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+    LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi
+else
+    echo " $ROCM_VERSION/bin/amd-smi NOT FOUND !!! "
+fi
+
+#AMD SMI - Display version information
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI version ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi version
+fi
+
+#AMD SMI - List GPU information
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI list ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi list
+fi
+
+#AMD SMI - Gets static information about the specified GPU
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI static ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi static
+fi
+
+#AMD SMI - Gets firmware information about the specified GPU
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI firmware ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi firmware
+fi
+
+#AMD SMI - Gets bad page information about the specified GPU
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI bad-pages ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi bad-pages
+fi
+
+#AMD SMI - Lists general process information running on the specified GPU
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI process ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi process
+fi
+
+#AMD SMI - Displays topology information of the devices
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI topology ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi topology
+fi
+
+#AMD SMI - Displays xgmi information of the devices
+if [ -f $ROCM_VERSION/bin/amd-smi ]
+then
+	echo "===== Section: AMD SMI xgmi ==============="
+	LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/amd-smi xgmi
 fi
 
 # ROCm SMI 
