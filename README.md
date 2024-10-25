@@ -10,7 +10,7 @@ Collects logs from last 3 boots (please enable persistent boot logs.)
 ```
 ### Step 1: Download rocm_techsupport.sh shell script using:
 ```
-wget -O rocm_techsupport.sh --no-check-certificate --no-cookies --no-check-certificate  https://raw.githubusercontent.com/amddcgpuce/rocmtechsupport/master/rocm_techsupport.sh
+wget -O rocm_techsupport.sh --no-cache --no-cookies --no-check-certificate  https://raw.githubusercontent.com/amddcgpuce/rocmtechsupport/master/rocm_techsupport.sh
 ```
 ### Step 2: Run the script, redirect output to a file
 ```
