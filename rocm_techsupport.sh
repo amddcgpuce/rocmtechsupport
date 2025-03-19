@@ -93,27 +93,27 @@ if [ ! -z "$JOURNALCTL_BIN" ]; then
     echo "Section: dmesg boot logs"
     LOG=`/bin/dmesg -T | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|mce|edac|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'`
     echo $LOG
-    echo $LOG >> dmesg.log
+    echo "$LOG" >> dmesg.log
     
     echo "Section: Current boot logs"
     LOG=`/bin/journalctl -b | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|mce|edac|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'`
     echo $LOG
-    echo $LOG >> journalctl.log    
+    echo "$LOG" >> journalctl.log
     
     echo "Section: Previous boot logs"
     LOG=`/bin/journalctl -b -1 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|mce|edac|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'`
     echo $LOG
-    echo $LOG >> journalctl_1.log
+    echo "$LOG" >> journalctl_1.log
     
     echo "Section: Second Previous boot logs"
     LOG=`/bin/journalctl -b -2 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|mce|edac|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'`
     echo $LOG
-    echo $LOG >> journalctl_2.log    
+    echo "$LOG" >> journalctl_2.log
     
     echo "Section: Third Previous boot logs"
     LOG=`/bin/journalctl -b -3 | /bin/grep -i -E ' Linux v| Command line|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog|bug|nmi|dazed|too|mce|edac|oop|fail|fault|atom|bios|kfd|vfio|iommu|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash'`
     echo $LOG
-    echo $LOG >> journalctl_3.log
+    echo "$LOG" >> journalctl_3.log
     
     tar -cjf `hostname`.`date +"%y-%m-%d-%H-%M-%S"`_logs.tar.bz2 dmesg.log journalctl.log journalctl_1.log journalctl_2.log journalctl_3.log
     rm dmesg.log journalctl.log journalctl_1.log journalctl_2.log journalctl_3.log
