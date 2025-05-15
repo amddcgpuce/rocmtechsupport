@@ -228,7 +228,7 @@ env | /bin/grep -i -E 'rocm|hsa|hip|mpi|openmp|ucx|miopen'
 echo "===== Section: Available ROCm versions ==============="
 if [ "$ROCM_VERSION"x = "x" ]; then
     /bin/ls -v -d /opt/rocm*
-    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-6]* | /usr/bin/tail -1`
+    ROCM_VERSION=`/bin/ls -v -d /opt/rocm-[3-7]* | /usr/bin/tail -1`
     if [ "$ROCM_VERSION"x = "x" ]
     then
         ROCM_VERSION=`/bin/ls -v -d /opt/rocm* | /usr/bin/tail -1`
