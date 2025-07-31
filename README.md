@@ -1,5 +1,5 @@
 ***
-## rocm_techsupport.sh V1.40 Utility to Collect ROCm TechSupport Logs
+## rocm_techsupport.sh V1.41 Utility to Collect ROCm TechSupport Logs
 ***
 Shell Utility for Ubuntu/CentOS/SLES bare metal or docker container to collect logs for support/troubleshooting purpose.
 Collects logs from last 3 boots (please enable persistent boot logs.)
