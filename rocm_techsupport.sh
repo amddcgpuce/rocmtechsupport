@@ -523,6 +523,17 @@ else
     echo "ROCmTechSupportNotFound: mst not found!"
 fi
 
+echo "===== Section: Broadcom niccli information    ==============="
+if [ -f /usr/bin/niccli ]; then
+    sudo /usr/bin/niccli --listdev
+    NUM_DEVICES=$(sudo niccli --listdev | grep -E '^[0-9]+ *\)' | wc -l)
+    for NUM in $(seq 1 ${NUM_DEVICES});do
+        sudo /usr/bin/niccli -i $NUM getqos
+    done
+else
+    echo "ROCmTechSupportNotFound: niccli command not found!"
+fi
+
 echo "===== Section: Ethernet IP ADDR information    ==============="
 # Ethernet IP Information
 if [ -f /usr/bin/ip ]; then
