@@ -561,6 +561,9 @@ else
     echo "ROCmTechSupportNotFound: ip command not found!"
 fi
 
+echo "===== Section: Netplan information    ==============="
+sudo cat /etc/netplan/*.yaml
+
 echo "===== Section: Ethernet ethtool information    ==============="
 if [ -f /usr/sbin/ethtool ]; then
     for iface in $(ls /sys/class/net); do 
