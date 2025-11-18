@@ -1,12 +1,13 @@
 #!/bin/sh
-# Copyright (c) 2023 Advanced Micro Devices, Inc. All Rights Reserved.
+# Copyright (c) 2025 Advanced Micro Devices, Inc. All Rights Reserved.
 #
 # rocm_techsupport.sh
 # This script collects ROCm and system logs on a Debian OS installation.
 # It requires 'sudo' supervisor privileges for some log collection
 # such as dmidecode, dmesg, lspci -vvv to read capabilities.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V1.40
+# Revision: V1.41
+# V1.41: cleanup and add some netowrk commands
 # V1.40: add AMD-SMI support (Shaun.O'Neill@amd.com)
 # V1.39: add mce, edac
 # V1.38: fix npsmode
@@ -53,7 +54,7 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
-echo "=== ROCm TechSupport Log Collection Utility: V1.39 ==="
+echo "=== ROCm TechSupport Log Collection Utility: V1.41 ==="
 /bin/date
 
 ret=`/bin/grep -i -E 'debian|ubuntu' /etc/os-release`
@@ -410,7 +411,7 @@ fi
 # ROCm SMI - shownodesbw
 if [ -f $ROCM_VERSION/bin/rocm-smi ]
 then
-    echo "===== Section: ROCm Show Nodebsion     ==============="
+    echo "===== Section: ROCm Show Node XGMI BW  ==============="
     LD_LIBRARY_PATH=$ROCM_VERSION/lib:$LD_LIBRARY_PATH $ROCM_VERSION/bin/rocm-smi --shownodesbw
 fi
 
@@ -522,18 +523,74 @@ else
     echo "ROCmTechSupportNotFound: mst not found!"
 fi
 
+echo "===== Section: Broadcom niccli information    ==============="
+if [ -f /usr/bin/niccli ]; then
+    sudo /usr/bin/niccli --listdev
+    NUM_DEVICES=$(sudo niccli --listdev | grep -E '^[0-9]+ *\)' | wc -l)
+    for NUM in $(seq 1 ${NUM_DEVICES});do
+        sudo /usr/bin/niccli -i $NUM getqos
+    done
+else
+    echo "ROCmTechSupportNotFound: niccli command not found!"
+fi
+
 echo "===== Section: Ethernet IP ADDR information    ==============="
 # Ethernet IP Information
-if [ -f /usr/bin/ip ]
-then
+if [ -f /usr/bin/ip ]; then
     /usr/bin/ip addr
-
-elif [ -f /usr/sbin/ip ]
-then
+    /usr/bin/ip -br addr | /usr/bin/sort
+    /usr/bin/ip link show
+    /usr/bin/ip route show | /usr/bin/sort
+    /usr/bin/ip rule show | /usr/bin/sort
+    /usr/bin/ip neighbor show | /usr/bin/sort
+elif [ -f /usr/sbin/ip ]; then
     /usr/sbin/ip addr
-elif [ -f /sbin/ip ]
-then
+    /usr/sbin/ip -br addr | /usr/bin/sort
+    /usr/sbin/ip link show
+    /usr/sbin/ip route show | /usr/bin/sort
+    /usr/sbin/ip rule show | /usr/bin/sort
+    /usr/sbin/ip neighbor show | /usr/bin/sort
+elif [ -f /sbin/ip ]; then
     /sbin/ip addr
+    /sbin/ip -br addr | /usr/bin/sort
+    /sbin/ip link show
+    /sbin/ip route show | /usr/bin/sort
+    /sbin/ip rule show | /usr/bin/sort
+    /sbin/ip neighbor show | /usr/bin/sort
 else
     echo "ROCmTechSupportNotFound: ip command not found!"
+fi
+
+echo "===== Section: Netplan information    ==============="
+sudo cat /etc/netplan/*.yaml
+
+echo "===== Section: Ethernet ethtool information    ==============="
+if [ -f /usr/sbin/ethtool ]; then
+    for iface in $(ls /sys/class/net); do 
+        echo -n "$iface: "; sudo ethtool "$iface"
+    done
+else
+    echo "ROCmTechSupportNotFound: ethtool command not found!"
+fi
+
+echo "===== Section: rdma information    ==============="
+if [ -f /usr/sbin/rdma ]; then
+    sudo /usr/sbin/rdma link | /usr/bin/sort
+    sudo /usr/sbin/rdma stat
+else
+    echo "ROCmTechSupportNotFound: rdma command not found!"
+fi
+
+echo "===== Section: lldpcli information    ==============="
+if [ -f /usr/sbin/lldpcli ]; then
+    sudo /usr/sbin/lldpcli show neighbor
+else
+    echo "ROCmTechSupportNotFound: lldpcli command not found!"
+fi
+
+echo "===== Section: lldpctl information    ==============="
+if [ -f /usr/sbin/lldpctl ]; then
+    sudo /usr/sbin/lldpctl
+else
+    echo "ROCmTechSupportNotFound: lldpctl command not found!"
 fi
