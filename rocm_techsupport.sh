@@ -594,3 +594,42 @@ if [ -f /usr/sbin/lldpctl ]; then
 else
     echo "ROCmTechSupportNotFound: lldpctl command not found!"
 fi
+
+echo "===== Section: /etc/tuned/amd_custom/tuned.conf information    ==============="
+if [ -f /etc/tuned/amd_custom/tuned.conf ]; then
+    sudo cat /etc/tuned/amd_custom/tuned.conf
+else
+    echo "ROCmTechSupportNotFound: /etc/tuned/amd_custom/tuned.conf not found!"
+fi
+
+
+echo "===== Section: nicctl ==============="
+# Ethernet IP Information
+if [ -f /usr/sbin/nicctl ]; then
+    sudo nicctl show version host-software
+    sudo nicctl show version firmware | grep -i firmware
+    # Show NIC information
+    sudo nicctl show card
+    # Show DCQCN parameters
+    sudo nicctl show dcqcn
+    # Show environment information
+    sudo nicctl show environment
+    # show logical interface (lif) information
+    sudo nicctl show lif
+    # Show pcie information
+    sudo nicctl show pcie
+    # Show pipeline commands
+    sudo nicctl show pipeline
+    # show port information
+    sudo nicctl show port
+    # Show QoS information
+    sudo nicctl show qos
+    # Show RDMA information
+    sudo nicctl show rdma
+    # show techsupport information
+    sudo nicctl show techsupport
+    # show version information
+    sudo nicctl show version
+else
+    echo "ROCmTechSupportNotFound: nicctl command not found!"
+fi
