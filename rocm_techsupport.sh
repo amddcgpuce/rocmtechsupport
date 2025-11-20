@@ -596,6 +596,7 @@ else
 fi
 
 echo "===== Section: /etc/tuned/amd_custom/tuned.conf information    ==============="
+sudo tuned-adm profile
 if [ -f /etc/tuned/amd_custom/tuned.conf ]; then
     sudo cat /etc/tuned/amd_custom/tuned.conf
 else
@@ -605,31 +606,28 @@ fi
 
 echo "===== Section: nicctl ==============="
 # Ethernet IP Information
-if [ -f /usr/sbin/nicctl ]; then
-    sudo nicctl show version host-software
-    sudo nicctl show version firmware | grep -i firmware
+if [ -x /usr/sbin/nicctl ]; then
     # Show NIC information
     sudo nicctl show card
-    # Show DCQCN parameters
-    sudo nicctl show dcqcn
-    # Show environment information
-    sudo nicctl show environment
-    # show logical interface (lif) information
-    sudo nicctl show lif
-    # Show pcie information
-    sudo nicctl show pcie
-    # Show pipeline commands
-    sudo nicctl show pipeline
-    # show port information
-    sudo nicctl show port
-    # Show QoS information
-    sudo nicctl show qos
-    # Show RDMA information
-    sudo nicctl show rdma
-    # show techsupport information
-    sudo nicctl show techsupport
-    # show version information
-    sudo nicctl show version
+    sudo nicctl show dcqcn                          # Show DCQCN parameters
+    sudo nicctl show environment                    # Show environment information
+    sudo nicctl show lif                            # show logical interface (lif) information
+    sudo nicctl show pcie                           # show pcie information
+    # sudo nicctl show pipeline internal anomalies    # show pipeline internal anomalies commands
+    # sudo nicctl show pipeline internal auto-clear   # show pipeline internal auto-clear commands
+    # sudo nicctl show pipeline internal rdma         # show pipeline internal RDMA commands
+    # sudo nicctl show pipeline internal rsq-ring     # show pipeline internal rsq-ring commands
+    # sudo nicctl show pipeline internal statistics   # show pipeline internal statistics commands
+    # sudo nicctl show pipeline internal table        # show pipeline internal table commands
+    sudo nicctl show port                           # show port information
+    sudo nicctl show qos                            # show qos information
+    sudo nicctl show rdma queue                     # Show RDMA information
+    sudo nicctl show rdma queue-pair                # Show RDMA queue-pair information
+    sudo nicctl show rdma statistics                # Show RDMA statistics
+    # sudo nicctl show techsupport -o /tmp/nicctl_techsupport_output.txt # show techsupport information
+    # cat /tmp/nicctl_techsupport_output.txt
+    sudo nicctl show version host-software          # show version for host-software information
+    sudo nicctl show version firmware               # show version for firmware information
 else
     echo "ROCmTechSupportNotFound: nicctl command not found!"
 fi
