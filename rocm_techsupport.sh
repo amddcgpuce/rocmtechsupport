@@ -607,12 +607,11 @@ fi
 echo "===== Section: nicctl ==============="
 # Ethernet IP Information
 if [ -x /usr/sbin/nicctl ]; then
-    # Show NIC information
-    sudo nicctl show card
+    sudo nicctl show card                           # Show NIC information
     sudo nicctl show dcqcn                          # Show DCQCN parameters
     sudo nicctl show environment                    # Show environment information
-    sudo nicctl show lif                            # show logical interface (lif) information
-    sudo nicctl show pcie                           # show pcie information
+    # sudo nicctl show lif                            # show logical interface (lif) information
+    sudo nicctl show pcie ats                         # show pcie information
     # sudo nicctl show pipeline internal anomalies    # show pipeline internal anomalies commands
     # sudo nicctl show pipeline internal auto-clear   # show pipeline internal auto-clear commands
     # sudo nicctl show pipeline internal rdma         # show pipeline internal RDMA commands
@@ -621,8 +620,8 @@ if [ -x /usr/sbin/nicctl ]; then
     # sudo nicctl show pipeline internal table        # show pipeline internal table commands
     sudo nicctl show port                           # show port information
     sudo nicctl show qos                            # show qos information
-    sudo nicctl show rdma queue                     # Show RDMA information
-    sudo nicctl show rdma queue-pair                # Show RDMA queue-pair information
+    # sudo nicctl show rdma queue                     # Show RDMA information
+    # sudo nicctl show rdma queue-pair                # Show RDMA queue-pair information
     sudo nicctl show rdma statistics                # Show RDMA statistics
     # sudo nicctl show techsupport -o /tmp/nicctl_techsupport_output.txt # show techsupport information
     # cat /tmp/nicctl_techsupport_output.txt
