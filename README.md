@@ -14,7 +14,11 @@ wget -O rocm_techsupport.sh --no-cache --no-cookies --no-check-certificate  http
 ```
 ### Step 2: Run the script, redirect output to a file
 ```
-sudo sh ./rocm_techsupport.sh > `hostname`.`date +"%y-%m-%d-%H-%M-%S"`.rocm_techsupport.log 2>&1
+sudo sh ./rocm_techsupport.sh
+```
+rocm_techsupport would collect the output at /tmp:
+```
+./rocm_techsupport.sh: log is located at /tmp/`hostname`.`date +"%y-%m-%d-%H-%M-%S"`.rocm_techsupport.log
 ```
 **NOTE:** Use ROCM_VERSION environment variable to specify the path to the installed ROCM (if not installed in default location)
 **NOTE:** Without `sudo`, certain data such as verbose `lspci`, `dmidecode` may not get captured in the logs but the script can be run without `sudo` in environments where `sudo` access is not permitted.

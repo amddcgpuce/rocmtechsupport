@@ -54,6 +54,13 @@
 #       Check paths for lspci, lshw
 # V1.0: Initial version
 #
+
+HOSTNAME=$(hostname)
+DATE="$(date +%y-%m-%d-%H-%M-%S)"
+LOG="/tmp/${HOSTNAME}.${DATE}.rocm_techsupport.log"
+echo "$0: log is located at $LOG "
+exec > $LOG 2>&1
+
 echo "=== ROCm TechSupport Log Collection Utility: V1.41 ==="
 /bin/date
 
