@@ -601,3 +601,39 @@ if [ -f /usr/sbin/lldpctl ]; then
 else
     echo "ROCmTechSupportNotFound: lldpctl command not found!"
 fi
+
+echo "===== Section: /etc/tuned/amd_custom/tuned.conf information    ==============="
+sudo tuned-adm profile
+if [ -f /etc/tuned/amd_custom/tuned.conf ]; then
+    sudo cat /etc/tuned/amd_custom/tuned.conf
+else
+    echo "ROCmTechSupportNotFound: /etc/tuned/amd_custom/tuned.conf not found!"
+fi
+
+
+echo "===== Section: nicctl ==============="
+# Ethernet IP Information
+if [ -x /usr/sbin/nicctl ]; then
+    sudo nicctl show card                           # Show NIC information
+    sudo nicctl show dcqcn                          # Show DCQCN parameters
+    sudo nicctl show environment                    # Show environment information
+    # sudo nicctl show lif                            # show logical interface (lif) information
+    sudo nicctl show pcie ats                         # show pcie information
+    # sudo nicctl show pipeline internal anomalies    # show pipeline internal anomalies commands
+    # sudo nicctl show pipeline internal auto-clear   # show pipeline internal auto-clear commands
+    # sudo nicctl show pipeline internal rdma         # show pipeline internal RDMA commands
+    # sudo nicctl show pipeline internal rsq-ring     # show pipeline internal rsq-ring commands
+    # sudo nicctl show pipeline internal statistics   # show pipeline internal statistics commands
+    # sudo nicctl show pipeline internal table        # show pipeline internal table commands
+    sudo nicctl show port                           # show port information
+    sudo nicctl show qos                            # show qos information
+    # sudo nicctl show rdma queue                     # Show RDMA information
+    # sudo nicctl show rdma queue-pair                # Show RDMA queue-pair information
+    sudo nicctl show rdma statistics                # Show RDMA statistics
+    # sudo nicctl show techsupport -o /tmp/nicctl_techsupport_output.txt # show techsupport information
+    # cat /tmp/nicctl_techsupport_output.txt
+    sudo nicctl show version host-software          # show version for host-software information
+    sudo nicctl show version firmware               # show version for firmware information
+else
+    echo "ROCmTechSupportNotFound: nicctl command not found!"
+fi
