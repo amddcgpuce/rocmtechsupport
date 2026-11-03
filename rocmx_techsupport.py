@@ -7,7 +7,8 @@
 #
 # Single-file, no external dependencies beyond Python 3.8+ stdlib.
 # Author: srinivasan.subramanian@amd.com
-# Revision: V2.0
+# Revision: V2.1
+# V2.1: Add pds_core/ionic/MTYPE to dmesg filter; add Platform Versions section
 #
 # Usage:
 #   sudo python3 rocmx_techsupport.py > $(hostname).$(date +%F-%H%M%S).rocmx.log 2>&1
@@ -26,13 +27,18 @@ import textwrap
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-VERSION = "2.0"
+VERSION = "2.1"
 SCRIPT_NAME = "rocmx_techsupport"
 
 DMESG_FILTER = (
     r" Linux v| Command line|gfx|power|pnp|pci|gpu|drm|error|xgmi|panic|watchdog"
     r"|bug|nmi|dazed|too|mce|edac|oop|fail|fault|atom|bios|kfd|vfio|iommu"
-    r"|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash"
+    r"|ras_mask|ECC|smpboot.*CPU|pcieport.*AER|amdfwflash|pds_core|ionic|MTYPE"
+)
+
+VERSIONS_FILTER = (
+    r"\[drm\].*version|DMI:|amdgpu version|OS DRM version|BIOS|firmware version"
+    r"|ROCm|Linux version|microcode"
 )
 
 GFX_TO_CDNA = {
@@ -393,6 +399,26 @@ def collect_kernel_logs(col: SectionCollector) -> None:
     else:
         col.add_not_found("journalctl")
     col.end_section("dmesg GPU/DRM/ATOM/BIOS")
+
+    # Versions section: extract version/firmware/BIOS lines from current boot log
+    col.begin_section("Platform Versions")
+    if journalctl:
+        rc, out, _ = run_cmd([journalctl, "-b", "0"], timeout=30)
+        if rc == 0:
+            matched = grep_lines(out, VERSIONS_FILTER)
+            if matched.strip():
+                col.add_output(matched)
+            else:
+                col.add_output("No version entries found in current boot log")
+    elif dmesg:
+        rc, out, _ = run_cmd([dmesg, "-T"], timeout=30)
+        if rc == 0:
+            matched = grep_lines(out, VERSIONS_FILTER)
+            if matched.strip():
+                col.add_output(matched)
+    else:
+        col.add_output("Neither journalctl nor dmesg available")
+    col.end_section("Platform Versions")
 
 
 def collect_hardware_info(col: SectionCollector) -> None:
