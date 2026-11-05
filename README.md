@@ -22,7 +22,7 @@ Python-based log collector for **TheRock 10.x** releases (ROCm 10.x). Supports t
 
 ```bash
 # Download
-wget -O rocmx_techsupport.py https://raw.githubusercontent.com/amddcgpuce/rocmtechsupport/rocmx_techsupport.py
+wget -O rocmx_techsupport.py https://raw.githubusercontent.com/amddcgpuce/rocmtechsupport/refs/heads/master/rocmx_techsupport.py
 
 # Run (sudo recommended for full data capture)
 sudo python3 rocmx_techsupport.py > $(hostname).$(date +%F-%H%M%S).rocmx.log 2>&1
